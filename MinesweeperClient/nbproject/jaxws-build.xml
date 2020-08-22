@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+        *** GENERATED FROM jax-ws.xml - DO NOT EDIT !                             ***
+        *** TO MODIFY wsimport options USE Web Service node -> Edit WS Attributes ***
+        *** TO CHANGE TARGETS GENERATED TO jaxws-build.xml COPY THOSE             ***
+        *** TARGETS TO ../build.xml AND MODIFY THAT FILE INSTEAD                  ***
+
+        --><project xmlns:xalan="http://xml.apache.org/xslt" xmlns:j2seproject3="http://www.netbeans.org/ns/j2se-project/3" xmlns:jaxws="http://www.netbeans.org/ns/jax-ws/1">
+    <!--
+                ===================
+                JAX-WS WSIMPORT SECTION
+                ===================
+            -->
+    <target name="wsimport-init" depends="init">
+        <mkdir dir="${build.generated.sources.dir}/jax-ws"/>
+        <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+            <classpath path="${libs.jaxws21.classpath}"/>
+        </taskdef>
+    </target>
+    <target name="wsimport-client-ILogin" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/ILogin"/>
+        <property name="wsdl-ILogin" location="xml-resources/web-service-references/ILogin/wsdl/localhost_4568/ws/ILogin.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/ILogin" destdir="${build.generated.dir}/jax-wsCache/ILogin" wsdl="${wsdl-ILogin}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:4568/ws/ILogin?wsdl" xnocompile="true" xendorsed="true" package="meta">
+            <depends file="${wsdl-ILogin}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/ILogin"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/ILogin">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-ILogin" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/ILogin"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/meta"/>
+    </target>
+    <target name="wsimport-client-ILogin_1" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/ILogin_1"/>
+        <property name="wsdl-ILogin_1" location="xml-resources/web-service-references/ILogin_1/wsdl/localhost_4568/ws/ILogin.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/ILogin_1" destdir="${build.generated.dir}/jax-wsCache/ILogin_1" wsdl="${wsdl-ILogin_1}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:4568/ws/ILogin?wsdl" xnocompile="true" xendorsed="true" package="meta">
+            <depends file="${wsdl-ILogin_1}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/ILogin_1"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/ILogin_1">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-ILogin_1" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/ILogin_1"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/meta"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-ILogin, wsimport-client-ILogin_1"/>
+</project>

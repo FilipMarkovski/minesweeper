@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is JAX-WS RI 2.2.9-b130926.1035 svn-revision#5f6196f2b90e9460065a4c2f4e30e065b245e51e. --><xs:schema xmlns:tns="http://ws/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://ws/">
+
+<xs:element name="login" type="tns:login"></xs:element>
+
+<xs:element name="loginResponse" type="tns:loginResponse"></xs:element>
+
+<xs:complexType name="login">
+<xs:sequence>
+<xs:element name="arg0" type="tns:request" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="request">
+<xs:sequence>
+<xs:element name="game" type="tns:game" minOccurs="0"></xs:element>
+<xs:element name="user" type="tns:user" minOccurs="0"></xs:element>
+<xs:element name="level" type="tns:level" minOccurs="0"></xs:element>
+<xs:element name="operation" type="xs:int"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="game">
+<xs:complexContent>
+<xs:extension base="tns:generalDObject">
+<xs:sequence>
+<xs:element name="gameId" type="xs:int"></xs:element>
+<xs:element name="score" type="xs:int"></xs:element>
+<xs:element name="date" type="xs:dateTime" minOccurs="0"></xs:element>
+<xs:element name="levelId" type="xs:int"></xs:element>
+<xs:element name="userId" type="xs:int"></xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="generalDObject" abstract="true">
+<xs:sequence></xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="user">
+<xs:complexContent>
+<xs:extension base="tns:generalDObject">
+<xs:sequence>
+<xs:element name="userId" type="xs:int"></xs:element>
+<xs:element name="username" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="password" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="email" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="highscore" type="xs:int"></xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="level">
+<xs:complexContent>
+<xs:extension base="tns:generalDObject">
+<xs:sequence>
+<xs:element name="levelId" type="xs:int"></xs:element>
+<xs:element name="difficulty" type="xs:string" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="loginResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:response" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="response">
+<xs:sequence>
+<xs:element name="status" type="tns:responseStatus" minOccurs="0"></xs:element>
+<xs:element name="error" type="xs:anyType" minOccurs="0"></xs:element>
+<xs:element name="game" type="tns:game" minOccurs="0"></xs:element>
+<xs:element name="user" type="tns:user" minOccurs="0"></xs:element>
+<xs:element name="level" type="tns:level" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="responseStatus">
+<xs:restriction base="xs:string">
+<xs:enumeration value="OK"></xs:enumeration>
+<xs:enumeration value="ERROR"></xs:enumeration>
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>

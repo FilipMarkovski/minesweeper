@@ -1,0 +1,10 @@
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+LucaG5GUI70SoftProces_01_Pred_1_Stud
+*.jar
