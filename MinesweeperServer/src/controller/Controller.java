@@ -13,6 +13,7 @@ import so.GetLevelSO;
 import so.LoginSO;
 import so.OpsteIzvrsenjeSO;
 import so.RegistrationSO;
+import so.SaveGameSO;
 import so.SaveHighscoreSO;
 import transfer.Request;
 import transfer.Response;
@@ -66,6 +67,11 @@ public class Controller {
     public Response getLevel(Request request) {
         so = new GetLevelSO();
         return ((GetLevelSO) so).getLevel(request);
+    }
+    
+    public Response saveGame(Request request) throws Exception {
+        so = new SaveGameSO();
+        return ((SaveGameSO) so).saveGame(request);
     }
     
     public Response saveHighscore(Request request) throws Exception {

@@ -27,6 +27,7 @@ import threads.ScoreListener;
 import transfer.Request;
 import transfer.Response;
 import transfer.util.Operation;
+import transfer.util.ResponseStatus;
 
 public class Controller {
 
@@ -77,58 +78,60 @@ public class Controller {
     }
 
     public void inicijalizacijaIgre() {
-        numberOfMines = 0;
-        numberOfFieldsLeft = rows * cols;
+        try {
 
-        game = new Game();
-        game.setDate(game.getDate(new Date()));
-        game.setUserId(user.getPrimaryKey());
+            numberOfMines = 0;
+            numberOfFieldsLeft = rows * cols;
 
-        setNormalSmiley(this.fxdc.startGame);
+            game = new Game();
+            game.setDate(game.getDate(new Date()));
+            game.setUserId(user.getPrimaryKey());
 
-        if (!counterThreads.isEmpty()) {
-            stopAllRunningThreads();
-        } else {
-            scoreListener = new ScoreListener(this);
-            scoreListener.start();
-            counterThreads.add(scoreListener);
-        }
+            setNormalSmiley(this.fxdc.startGame);
 
-        System.out.println("Currently running: " + scoreListener.getName());
+            if (!counterThreads.isEmpty()) {
+                stopAllRunningThreads();
+            } else {
+                scoreListener = new ScoreListener(this);
+                scoreListener.start();
+                counterThreads.add(scoreListener);
+            }
 
-        for (int x = 0; x < rows; x++) {
-            for (int y = 0; y < cols; y++) {
-                Button b = null;
+            System.out.println("Currently running: " + scoreListener.getName());
+
+            for (int x = 0; x < rows; x++) {
+                for (int y = 0; y < cols; y++) {
+                    Button b = null;
 
 //                boolean hasBomb = Math.random() < 0.2; // hard
 //                boolean hasBomb = Math.random() < 0.05;
 //                boolean hasBomb = Math.random() < difficulty;
-                boolean hasBomb = Math.random() < level.bombPercentage;
-                mines[x][y] = hasBomb;
+                    boolean hasBomb = Math.random() < level.bombPercentage;
+                    mines[x][y] = hasBomb;
 
-                if (hasBomb) {
-                    numberOfMines++;
-                    numberOfFieldsLeft--;
+                    if (hasBomb) {
+                        numberOfMines++;
+                        numberOfFieldsLeft--;
+                    }
+
+                    try {
+                        b = this.fxdc.getButton(x, y);
+                        resetButton(b);
+                        resetButton(b);
+
+                    } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException ex) {
+                        Logger.getLogger(Controller.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                    }
+
                 }
-
-                try {
-                    b = this.fxdc.getButton(x, y);
-                    resetButton(b);
-                    resetButton(b);
-//                    b.setText("");
-//                    b.setGraphic(null);
-//                    b.getStyleClass().remove("bg-white");
-//                    b.getStyleClass().remove("bg-bomb");
-//                    b.getStyleClass().remove("bg-white");
-//                    b.getStyleClass().remove("bg-bomb");
-//                    b.getStyleClass().add("bg-dark");
-
-                } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException ex) {
-                    Logger.getLogger(Controller.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-                }
-
-//                b.setDisable(false);
             }
+            
+            gameStartedAlert();
+
+        } catch (Exception ex) {
+            gameFailedToStartAlert();
+            System.err.println(ex.getMessage());
+            System.err.println(ex.getStackTrace());
         }
     }
 
@@ -249,45 +252,53 @@ public class Controller {
 
     public void open(Button b) {
 
-        Integer row = GridPane.getRowIndex(b);
-        Integer column = GridPane.getColumnIndex(b);
+        try {
+            
+            Integer row = GridPane.getRowIndex(b);
+            Integer column = GridPane.getColumnIndex(b);
 
-        int r = row == null ? 0 : row;
-        int c = column == null ? 0 : column;
+            int r = row == null ? 0 : row;
+            int c = column == null ? 0 : column;
 
-        if (b.isDisabled()) {
-            return;
-        }
-
-        b.setGraphic(null);
-
-        boolean mine = mines[r][c];
-
-        if (mine) {
-            bombCellStyle(b);
-            System.out.println("Game Over");
-            gameOver();
-            setGameOverSmiley(this.fxdc.startGame);
-        } else {
-
-            setFieldNumber(b, r, c);
-            openCellStyle(b);
-
-            if (b.getText().isEmpty()) {
-                try {
-                    findEmptyCells(r, c);
-                } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException ex) {
-                    Logger.getLogger(FXMLDocumentController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-                }
-            } else {
-                numberOfFieldsLeft--;
+            if (b.isDisabled()) {
+                return;
             }
 
-            checkIfGameIsFinished();
-        }
+            b.setGraphic(null);
 
-        b.setDisable(true);
-        b.setOpacity(1);
+            boolean mine = mines[r][c];
+
+            if (mine) {
+                bombCellStyle(b);
+                System.out.println("Game Over");
+                gameOver();
+                setGameOverSmiley(this.fxdc.startGame);
+            } else {
+
+                setFieldNumber(b, r, c);
+                openCellStyle(b);
+
+                if (b.getText().isEmpty()) {
+                    try {
+                        findEmptyCells(r, c);
+                    } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException ex) {
+                        Logger.getLogger(FXMLDocumentController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                    }
+                } else {
+                    numberOfFieldsLeft--;
+                }
+
+                checkIfGameIsFinished();
+            }
+
+            b.setDisable(true);
+            b.setOpacity(1);
+            
+        } catch (Exception ex) {
+            failedToOpenCellAlert();
+            System.err.println(ex.getMessage());
+            System.err.println(ex.getStackTrace());
+        }
     }
 
     public void setFlag(Button b) {
@@ -415,7 +426,7 @@ public class Controller {
     }
 
     public void gameOver() {
-        
+
         for (int x = 0; x < rows; x++) {
             for (int y = 0; y < cols; y++) {
                 Button b = null;
@@ -434,48 +445,128 @@ public class Controller {
                 b.setDisable(true);
             }
         }
-        
+
 //        scoreListener.interrupt();
         stopAllRunningThreads();
     }
 
     private void win() {
-        setWinSmiley(this.fxdc.startGame);
+        try {
 
-        Alert playAgainAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        playAgainAlert.setTitle("Winner!");
-        playAgainAlert.setHeaderText(null);
-        playAgainAlert.setContentText("You've won! Congratulations!\nYour score: " + this.fxdc.score.getText() + "\n\nWant to try again?");
+            setWinSmiley(this.fxdc.startGame);
 
-        ButtonType playAgain = new ButtonType("Play again");
-        ButtonType cancel = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+            Alert playAgainAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            playAgainAlert.setTitle("Winner!");
+            playAgainAlert.setHeaderText(null);
+            playAgainAlert.setContentText("You've won! Congratulations!\nYour score: " + this.fxdc.score.getText() + "\n\nWant to try again?");
 
-        playAgainAlert.getButtonTypes().setAll(playAgain, cancel);
-        Optional<ButtonType> result = playAgainAlert.showAndWait();
+            ButtonType playAgain = new ButtonType("Play again");
+            ButtonType cancel = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-        if (user.getHighscore() > Integer.parseInt(this.fxdc.score.getText())) {
-            saveResult();
-        }
+            playAgainAlert.getButtonTypes().setAll(playAgain, cancel);
+            Optional<ButtonType> result = playAgainAlert.showAndWait();
 
-        if (result.get() == playAgain) {
-//            postaviTezinu();
-            inicijalizacijaIgre();
+            saveGame();
+            
+            if (user.getHighscore() > Integer.parseInt(this.fxdc.score.getText())) {
+                saveHighscore();
+            }
+
+            if (result.get() == playAgain) {
+    //            postaviTezinu();
+                inicijalizacijaIgre();
+            }
+            
+        } catch (Exception ex) {
+            winErrorAlert();
         }
     }
 
     public void gameAuthor() {
-        Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
-        infoAlert.setTitle("Autor programa:");
-        infoAlert.setHeaderText(null);
-        infoAlert.setContentText("dipl. inz. organizacionih nauka Filip Markovski.");
-        infoAlert.showAndWait();
+        Alert.AlertType errorAlert = Alert.AlertType.INFORMATION;
+        String title = "Game author:";
+        String message = "Engineer of Organizational Sciences, Filip Markovski.";
+
+        alertTemplate(title, message, errorAlert);
     }
 
+    public void gameStartedAlert() {
+        Alert.AlertType errorAlert = Alert.AlertType.INFORMATION;
+        String title = "Game started!";
+        String message = "Your game has started!";
+
+        alertTemplate(title, message, errorAlert);
+    }
+
+    public void gameFailedToStartAlert() {
+        Alert.AlertType errorAlert = Alert.AlertType.ERROR;
+        String title = "Error!";
+        String message = "Your game cannot start.";
+
+        alertTemplate(title, message, errorAlert);
+    }
+    
+    public void failedToOpenCellAlert() {
+        Alert.AlertType errorAlert = Alert.AlertType.ERROR;
+        String title = "Error!";
+        String message = "Error while opening the chosen field.";
+
+        alertTemplate(title, message, errorAlert);
+    }
+    
+    public void winErrorAlert() {
+        Alert.AlertType errorAlert = Alert.AlertType.ERROR;
+        String title = "Error!";
+        String message = "Error while showing the result of your game.";
+
+        alertTemplate(title, message, errorAlert);
+    }
+    
+    public void gameSavedAlert() {
+        Alert.AlertType errorAlert = Alert.AlertType.INFORMATION;
+        String title = "Attention";
+        String message = "Your game record has been saved.";
+
+        alertTemplate(title, message, errorAlert);
+    }
+    
+    public void highscoreSavedAlert() {
+        Alert.AlertType errorAlert = Alert.AlertType.INFORMATION;
+        String title = "Attention";
+        String message = "Your highscore has been saved.";
+
+        alertTemplate(title, message, errorAlert);
+    }
+    
+    public void gameSaveErrorAlert() {
+        Alert.AlertType errorAlert = Alert.AlertType.ERROR;
+        String title = "Error";
+        String message = "System cannot save the game record.";
+
+        alertTemplate(title, message, errorAlert);
+    }
+    
+    public void saveHighscoreErrorAlert() {
+        Alert.AlertType errorAlert = Alert.AlertType.ERROR;
+        String title = "Error";
+        String message = "System cannot save your highscore.";
+
+        alertTemplate(title, message, errorAlert);
+    }
+    
     public void gameInfo() {
-        Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
-        infoAlert.setTitle("Informacije o programu:");
+        Alert.AlertType errorAlert = Alert.AlertType.INFORMATION;
+        String title = "Informacije o programu:";
+        String message = "Minesweeper je video igra za jednog igrača. Cilj igre je da se otvore sva polja na tabli, bez detoniranja skrivenih mina. Polja sadrže broj, koji označa koliko ima mina oko njega.";
+
+        alertTemplate(title, message, errorAlert);
+    }
+
+    public void alertTemplate(String title, String message, Alert.AlertType alertType) {
+        Alert infoAlert = new Alert(alertType);
+        infoAlert.setTitle(title);
         infoAlert.setHeaderText(null);
-        infoAlert.setContentText("Minesweeper je video igra za jednog igrača. Cilj igre je da se otvore sva polja na tabli, bez detoniranja skrivenih mina. Polja sadrže broj, koji označa koliko ima mina oko njega.");
+        infoAlert.setContentText(message);
         infoAlert.showAndWait();
     }
 
@@ -497,8 +588,31 @@ public class Controller {
 
         return imgView;
     }
+    
+    public void saveGame() {
+        int score = Integer.parseInt(this.fxdc.score.getText());
 
-    public void saveResult() {
+        game.setScore(score);
+        game.setLevel(level.getPrimaryKey());
+
+        Request request = new Request();
+        request.setGame(game);
+        request.setLevel(level);
+        request.setUser(user);
+        request.setOperation(Operation.OPERATION_SAVE_GAME);
+
+        Communication.getInstance().sendRequest(request);
+        Response response = Communication.getInstance().readResponse();
+        
+        
+        if (response.getStatus() == ResponseStatus.OK) {
+            gameSavedAlert();
+        } else {
+            gameSaveErrorAlert();
+        }
+    }
+
+    public void saveHighscore() {
         int newHighscore = Integer.parseInt(this.fxdc.score.getText());
 
         game.setScore(newHighscore);
@@ -516,6 +630,13 @@ public class Controller {
 
         user.highscore = response.getUser().highscore;
         this.fxdc.highscore.setText(String.valueOf(user.getHighscore()));
+        
+        
+        if (response.getStatus() == ResponseStatus.OK) {
+            highscoreSavedAlert();
+        } else {
+            saveHighscoreErrorAlert();
+        }
     }
 
     private void stopAllRunningThreads() {

@@ -8,7 +8,7 @@ import java.util.List;
 
 
 public abstract class BrokerBazePodataka 
-{   public abstract boolean makeConnection();
+{  public abstract boolean makeConnection();
     public abstract boolean insertRecord(GeneralDObject odo);
     public abstract boolean updateRecord(GeneralDObject odo,GeneralDObject odoold);
     public abstract boolean updateRecord(GeneralDObject odo); 

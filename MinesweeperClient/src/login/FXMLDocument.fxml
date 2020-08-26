@@ -14,8 +14,8 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="usernameField" focusTraversable="false" layoutX="80.0" layoutY="66.0" prefHeight="33.0" prefWidth="226.0" promptText="Username" style="-fx-border-color: #BEBFC1; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="pera" />
-      <PasswordField fx:id="passwordField" focusTraversable="false" layoutX="80.0" layoutY="113.0" prefHeight="33.0" prefWidth="226.0" promptText="Password" style="-fx-border-color: #BEBFC1; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="pera" />
+      <TextField fx:id="usernameField" focusTraversable="false" layoutX="80.0" layoutY="66.0" prefHeight="33.0" prefWidth="226.0" promptText="Username" style="-fx-border-color: #BEBFC1; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="markovski" />
+      <PasswordField fx:id="passwordField" focusTraversable="false" layoutX="80.0" layoutY="113.0" prefHeight="33.0" prefWidth="226.0" promptText="Password" style="-fx-border-color: #BEBFC1; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="sifra" />
       <Button fx:id="loginButton" layoutX="139.0" layoutY="215.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="111.0" style="-fx-background-color: gray; -fx-background-radius: 5px; -fx-text-fill: #ffffff;" text="LOGIN">
          <font>
             <Font name="Arial Bold" size="12.0" />

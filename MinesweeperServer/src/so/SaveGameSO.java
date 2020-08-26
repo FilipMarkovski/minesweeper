@@ -15,12 +15,12 @@ import transfer.util.ResponseStatus;
  *
  * @author User
  */
-public class SaveHighscoreSO extends OpsteIzvrsenjeSO {
+public class SaveGameSO extends OpsteIzvrsenjeSO {
 
     Request request;
     Response response;
 
-    public Response saveHighscore(Request request) {
+    public Response saveGame(Request request) {
         this.request = request;
         this.response = new Response();
         opsteIzvrsenjeSO();
@@ -32,10 +32,10 @@ public class SaveHighscoreSO extends OpsteIzvrsenjeSO {
         System.out.println(request.getGame().getAtrValue());
         System.out.println(request.getUser().getAtrValue());
         
-        boolean success = bbp.updateRecord(request.getUser());
+        boolean success = bbp.insertRecord(request.getGame());
+        
         if (success) {
             response.setStatus(ResponseStatus.OK);
-            response.setUser((User) bbp.findRecord(request.getUser()));
             return true;
         }
         

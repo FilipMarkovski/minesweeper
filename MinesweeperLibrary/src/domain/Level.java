@@ -1,5 +1,5 @@
 /* Level.java 
- * @autor prof. dr Sinisa Vlajic,  
+ * @autor Filip Markovski,  
  * Univerzitet u Beogradu'
  * Fakultet organizacionih nauka 
  * Katedra za softversko inzenjerstvo 

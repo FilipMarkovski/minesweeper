@@ -104,6 +104,16 @@ public class ClientThread extends Thread {
                 }
                 break;
 
+            case Operation.OPERATION_SAVE_GAME:
+                try {
+                    response = Controller.getInstance().saveGame(request);
+                } catch (Exception ex) {
+                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+                    response.setStatus(ResponseStatus.ERROR);
+                    response.setError(ex.getMessage());
+                }
+                break;
+
             case Operation.OPERATION_NEW_HIGHSCORE:
                 try {
                     response = Controller.getInstance().saveHighscore(request);

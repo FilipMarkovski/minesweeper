@@ -58,6 +58,4 @@ public class Request implements Serializable {
     public void setOperation(int operation) {
         this.operation = operation;
     }
-
-    
 }

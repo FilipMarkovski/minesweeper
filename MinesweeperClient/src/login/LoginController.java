@@ -108,9 +108,6 @@ public class LoginController {
 //            System.out.println("resp: " + );
             transfer.Response response = Communication.getInstance().readResponse();
             
-            System.out.println("response status: " + response.getStatus() );
-            System.out.println("response user username: " + response.getUser().getUsername() );
-            
             if (response != null) {
                 if (response.getStatus() == ResponseStatus.ERROR) {
                     alertMessage("Registration unsuccessful!", Alert.AlertType.ERROR);
