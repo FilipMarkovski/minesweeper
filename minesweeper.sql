@@ -31,13 +31,17 @@ CREATE TABLE `game` (
   KEY `level` (`levelId`),
   CONSTRAINT `game_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`),
   CONSTRAINT `game_ibfk_2` FOREIGN KEY (`levelId`) REFERENCES `level` (`levelId`)
-) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `game` */
 
 insert  into `game`(`gameId`,`date`,`userId`,`score`,`levelId`) values 
 (113,'2020-08-22',34,116,1),
-(114,'2020-08-22',34,9,1);
+(114,'2020-08-22',34,9,1),
+(115,'2020-08-25',49,58,1),
+(116,'2020-08-25',49,53,1),
+(117,'2020-08-25',49,40,1),
+(118,'2020-08-25',49,34,1);
 
 /*Table structure for table `level` */
 
@@ -65,17 +69,18 @@ CREATE TABLE `user` (
   `userId` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `highscore` int(11) NOT NULL,
   PRIMARY KEY (`userId`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*Data for the table `user` */
 
 insert  into `user`(`userId`,`username`,`password`,`email`,`highscore`) values 
 (34,'pera','pera','pera@gmail.com',9),
-(49,'markovski','sifra','filipmarkovski@gmail.com',10000);
+(49,'markovski','sifra','filipmarkovski@gmail.com',34),
+(50,'marko','sifra','marko@gmail.com',0);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
