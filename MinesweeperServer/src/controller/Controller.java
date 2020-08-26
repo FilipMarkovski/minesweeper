@@ -37,22 +37,6 @@ public class Controller {
         }
         return instance;
     }
-
-    public List<Socket> getClients() {
-        return clients;
-    }
-
-    public void setClients(List<Socket> clients) {
-        this.clients = clients;
-    }
-
-    public void addClient(Socket socket) {
-        clients.add(socket);
-    }
-
-    public void removeClient(Socket socket) {
-        clients.remove(socket);
-    }
     
     public Response login(Request request) throws Exception {
         so = new LoginSO();
