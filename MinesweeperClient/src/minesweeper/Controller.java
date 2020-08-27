@@ -2,6 +2,7 @@ package minesweeper;
 
 import communication.Communication;
 import domain.Game;
+import domain.GeneralDObject;
 import domain.Level;
 import domain.User;
 import java.awt.Point;
@@ -28,6 +29,8 @@ import transfer.Request;
 import transfer.Response;
 import transfer.util.Operation;
 import transfer.util.ResponseStatus;
+import util.KonverterGUIDK;
+import util.Message;
 
 public class Controller {
 
@@ -70,7 +73,8 @@ public class Controller {
 
         this.fxdc.score.setText(String.valueOf(0));
 
-        this.fxdc.highscore.setText(String.valueOf(user.getHighscore()));
+//        this.fxdc.highscore.setText(String.valueOf(user.getHighscore()));
+        napuniFormuIzObjekta(user);
         counterThreads = new ArrayList<>();
 
         setNormalSmiley(this.fxdc.startGame);
@@ -125,11 +129,11 @@ public class Controller {
 
                 }
             }
-            
-            gameStartedAlert();
+
+            Message.gameStartedAlert();
 
         } catch (Exception ex) {
-            gameFailedToStartAlert();
+            Message.gameFailedToStartAlert();
             System.err.println(ex.getMessage());
             System.err.println(ex.getStackTrace());
         }
@@ -253,7 +257,7 @@ public class Controller {
     public void open(Button b) {
 
         try {
-            
+
             Integer row = GridPane.getRowIndex(b);
             Integer column = GridPane.getColumnIndex(b);
 
@@ -293,9 +297,9 @@ public class Controller {
 
             b.setDisable(true);
             b.setOpacity(1);
-            
+
         } catch (Exception ex) {
-            failedToOpenCellAlert();
+            Message.failedToOpenCellAlert();
             System.err.println(ex.getMessage());
             System.err.println(ex.getStackTrace());
         }
@@ -467,108 +471,22 @@ public class Controller {
             Optional<ButtonType> result = playAgainAlert.showAndWait();
 
             saveGame();
-            
+
             if (user.getHighscore() > Integer.parseInt(this.fxdc.score.getText())) {
                 saveHighscore();
             }
 
             if (result.get() == playAgain) {
-    //            postaviTezinu();
+                //            postaviTezinu();
                 inicijalizacijaIgre();
             }
-            
+
         } catch (Exception ex) {
-            winErrorAlert();
+            Message.winErrorAlert();
         }
     }
 
-    public void gameAuthor() {
-        Alert.AlertType errorAlert = Alert.AlertType.INFORMATION;
-        String title = "Game author:";
-        String message = "Engineer of Organizational Sciences, Filip Markovski.";
 
-        alertTemplate(title, message, errorAlert);
-    }
-
-    public void gameStartedAlert() {
-        Alert.AlertType errorAlert = Alert.AlertType.INFORMATION;
-        String title = "Game started!";
-        String message = "Your game has started!";
-
-        alertTemplate(title, message, errorAlert);
-    }
-
-    public void gameFailedToStartAlert() {
-        Alert.AlertType errorAlert = Alert.AlertType.ERROR;
-        String title = "Error!";
-        String message = "Your game cannot start.";
-
-        alertTemplate(title, message, errorAlert);
-    }
-    
-    public void failedToOpenCellAlert() {
-        Alert.AlertType errorAlert = Alert.AlertType.ERROR;
-        String title = "Error!";
-        String message = "Error while opening the chosen field.";
-
-        alertTemplate(title, message, errorAlert);
-    }
-    
-    public void winErrorAlert() {
-        Alert.AlertType errorAlert = Alert.AlertType.ERROR;
-        String title = "Error!";
-        String message = "Error while showing the result of your game.";
-
-        alertTemplate(title, message, errorAlert);
-    }
-    
-    public void gameSavedAlert() {
-        Alert.AlertType errorAlert = Alert.AlertType.INFORMATION;
-        String title = "Attention";
-        String message = "Your game record has been saved.";
-
-        alertTemplate(title, message, errorAlert);
-    }
-    
-    public void highscoreSavedAlert() {
-        Alert.AlertType errorAlert = Alert.AlertType.INFORMATION;
-        String title = "Attention";
-        String message = "Your highscore has been saved.";
-
-        alertTemplate(title, message, errorAlert);
-    }
-    
-    public void gameSaveErrorAlert() {
-        Alert.AlertType errorAlert = Alert.AlertType.ERROR;
-        String title = "Error";
-        String message = "System cannot save the game record.";
-
-        alertTemplate(title, message, errorAlert);
-    }
-    
-    public void saveHighscoreErrorAlert() {
-        Alert.AlertType errorAlert = Alert.AlertType.ERROR;
-        String title = "Error";
-        String message = "System cannot save your highscore.";
-
-        alertTemplate(title, message, errorAlert);
-    }
-    
-    public void gameInfo() {
-        Alert.AlertType errorAlert = Alert.AlertType.INFORMATION;
-        String title = "Informacije o programu:";
-        String message = "Minesweeper je video igra za jednog igrača. Cilj igre je da se otvore sva polja na tabli, bez detoniranja skrivenih mina. Polja sadrže broj, koji označa koliko ima mina oko njega.";
-
-        alertTemplate(title, message, errorAlert);
-    }
-
-    public void alertTemplate(String title, String message, Alert.AlertType alertType) {
-        Alert infoAlert = new Alert(alertType);
-        infoAlert.setTitle(title);
-        infoAlert.setHeaderText(null);
-        infoAlert.setContentText(message);
-        infoAlert.showAndWait();
-    }
 
     public void exitGame() {
 //        if (scoreListener != null && scoreListener.isAlive()) {
@@ -588,7 +506,7 @@ public class Controller {
 
         return imgView;
     }
-    
+
     public void saveGame() {
         int score = Integer.parseInt(this.fxdc.score.getText());
 
@@ -603,12 +521,11 @@ public class Controller {
 
         Communication.getInstance().sendRequest(request);
         Response response = Communication.getInstance().readResponse();
-        
-        
+
         if (response.getStatus() == ResponseStatus.OK) {
-            gameSavedAlert();
+            Message.gameSavedAlert();
         } else {
-            gameSaveErrorAlert();
+            Message.gameSaveErrorAlert();
         }
     }
 
@@ -630,12 +547,13 @@ public class Controller {
 
         user.highscore = response.getUser().highscore;
         this.fxdc.highscore.setText(String.valueOf(user.getHighscore()));
-        
+
+        napuniFormuIzObjekta(user);
         
         if (response.getStatus() == ResponseStatus.OK) {
-            highscoreSavedAlert();
+            Message.highscoreSavedAlert();
         } else {
-            saveHighscoreErrorAlert();
+            Message.saveHighscoreErrorAlert();
         }
     }
 
@@ -647,5 +565,19 @@ public class Controller {
             }
         }
         counterThreads.clear();
+    }
+
+    public boolean napuniFormuIzObjekta(GeneralDObject gdo) {
+        if (!KonverterGUIDK.konvertujDKUGUI(gdo, fxdc)) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean napuniObjekatIzForme(GeneralDObject gdo) {
+        if (!KonverterGUIDK.konvertujGUIUDK(fxdc, gdo)) {
+            return false;
+        }
+        return true;
     }
 }

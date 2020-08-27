@@ -8,6 +8,7 @@ package minesweeper.GUIListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import minesweeper.Controller;
+import util.Message;
 
 /**
  *
@@ -22,6 +23,6 @@ public class GUIListenerGameInfo implements EventHandler {
     
     @Override
     public void handle(Event event) {
-        controller.gameInfo();
+        Message.gameInfo();
     }
 }

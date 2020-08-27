@@ -9,6 +9,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import minesweeper.Controller;
 import minesweeper.FXMLDocumentController;
+import util.Message;
 
 /**
  *
@@ -23,6 +24,6 @@ public class GUIListenerGameAuthor implements EventHandler {
     
     @Override
     public void handle(Event event) {
-        controller.gameAuthor();
+        Message.gameAuthor();
     }
 }

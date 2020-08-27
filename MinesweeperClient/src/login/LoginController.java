@@ -99,7 +99,7 @@ public class LoginController {
             user.setUsername(username);
             user.setPassword(password);
             user.setEmail(email);
-            user.setHighscore(0);
+            user.setHighscore(10000);
 
             request.setUser(user);
             Communication.getInstance().sendRequest(request);
